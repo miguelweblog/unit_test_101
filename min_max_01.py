@@ -1,36 +1,28 @@
-# Python program to demonstrate
-# command line arguments
+import argparse
+# defined command line options
+# this also generates --help and error handling
+CLI=argparse.ArgumentParser()
+CLI.add_argument(
+  "integers",  # name on the CLI - drop the `--` for positional/required parameters
+  metavar='N',
+  nargs="+",  # 0 or more values expected => creates a list
+  type=int,
+  default=[1, 2, 3],  # default if nothing is provided
+  help='list of values (default: 1, 2, 3)'
+)
+
+# parse the command line
+args = CLI.parse_args()
+min = 0
+max = 0
+for i in args.integers:
+    if i < min:
+        min = i
+    elif i > max:
+        max = i
 
 
-import getopt, sys
+# access CLI options
+print("list: %r" % args.integers)
+print("min: %d max: %d" % (min, max))
 
-
-# Remove 1st argument from the
-# list of command line arguments
-argumentList = sys.argv[1:]
-
-# Options
-options = "hmo:"
-
-# Long options
-long_options = ["Help", "My_file", "Output="]
-
-try:
-    # Parsing argument
-    arguments, values = getopt.getopt(argumentList, options, long_options)
-    
-    # checking each argument
-    for currentArgument, currentValue in arguments:
-
-        if currentArgument in ("-h", "--Help"):
-            print ("Displaying Help")
-            
-        elif currentArgument in ("-m", "--My_file"):
-            print ("Displaying file_name:", sys.argv[0])
-            
-        elif currentArgument in ("-o", "--Output"):
-            print (("Enabling special output mode (% s)") % (currentValue))
-            
-except getopt.error as err:
-    # output error, and return with an error code
-    print (str(err))
